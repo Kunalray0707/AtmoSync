@@ -25,6 +25,7 @@ from ml.spoilage_model import spoilage_predictor
 from ml.eta_model import eta_predictor
 from ml.price_forecast import price_forecaster
 from ml.explainability import explainability_engine
+from analytics.scms_analyzer import scms_analyzer
 from backend.services.export_service import export_service
 from backend.services.alert_service import alert_service
 
@@ -171,6 +172,34 @@ def get_ml_explainability():
             "auc_score": 0.942,
             "mae_rsl_days": 0.42
         }
+    }
+
+
+@app.get("/api/scms/summary")
+def get_scms_analytics_summary():
+    """
+    Returns global analytics summary for user-provided SCMS Delivery History Dataset.
+    """
+    return scms_analyzer.generate_analytics_summary()
+
+
+@app.get("/api/scms/shipments")
+def get_scms_shipments(limit: int = Query(50), offset: int = Query(0), country: Optional[str] = None):
+    """
+    Returns paginated cleaned SCMS shipment records with optional country filtering.
+    """
+    df = scms_analyzer.clean_and_transform()
+    if country:
+        df = df[df['Country'].str.lower() == country.lower()]
+    
+    total = len(df)
+    subset = df.iloc[offset:offset + limit].fillna("N/A")
+    records = subset.to_dict(orient="records")
+    return {
+        "total_records": total,
+        "limit": limit,
+        "offset": offset,
+        "shipments": records
     }
 
 
