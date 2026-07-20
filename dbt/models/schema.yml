@@ -1,0 +1,29 @@
+version: 2
+
+sources:
+  - name: raw_data
+    database: ATMOSYNC_DB
+    schema: RAW_SCHEMA
+    tables:
+      - name: raw_telemetry
+
+models:
+  - name: stg_telemetry
+    description: "Staged, cleaned telemetry records from raw IoT JSON stream."
+    columns:
+      - name: container_id
+        description: "Unique identifier for the cold chain reefer container."
+        tests:
+          - not_null
+      - name: temperature_celsius
+        description: "Recorded micro-climate temperature inside container."
+        tests:
+          - not_null
+
+  - name: fct_spoilage_events
+    description: "Calculated spoilage alert events and thermal status classifications."
+    columns:
+      - name: event_id
+        tests:
+          - unique
+          - not_null

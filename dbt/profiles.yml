@@ -1,0 +1,14 @@
+atmosync:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'xy12345.us-east-1') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'ATMOSYNC_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', 'Password123!') }}"
+      role: ATMOSYNC_DATA_ENGINEER
+      database: ATMOSYNC_DB
+      warehouse: COMPUTE_WH
+      schema: STAGING_SCHEMA
+      threads: 4
+      client_session_keep_alive: False

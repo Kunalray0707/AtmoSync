@@ -1,0 +1,12 @@
+# Dockerfile.simulator - IoT Stream Telemetry Service
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir kafka-python pydantic pydantic-settings pandas numpy
+
+COPY simulator/ ./simulator
+COPY kafka/ ./kafka
+
+CMD ["python", "-m", "simulator.iot_simulator"]

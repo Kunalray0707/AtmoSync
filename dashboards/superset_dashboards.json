@@ -1,0 +1,51 @@
+{
+  "dashboards": [
+    {
+      "dashboard_title": "Executive Cold-Chain Overview",
+      "slug": "executive-cold-chain-overview",
+      "slices": [
+        "Fleet Spoilage Risk Heatmap",
+        "Total Financial Loss vs Arbitrage Gain",
+        "Container Health Index Distribution",
+        "Active Commodity Volume by Destination"
+      ]
+    },
+    {
+      "dashboard_title": "Container Micro-Climate Monitoring",
+      "slug": "container-microclimate-monitoring",
+      "slices": [
+        "Real-time Temperature Drift",
+        "Relative Humidity Excursions",
+        "Door Unlatched Breach Frequency",
+        "Battery Discharge Trajectory"
+      ]
+    },
+    {
+      "dashboard_title": "Spoilage & Thermal Kinetics Dashboard",
+      "slug": "spoilage-thermal-kinetics",
+      "slices": [
+        "Arrhenius Degradation Kinetics Curve",
+        "Remaining Shelf Life (RSL) Distribution",
+        "Degree-Hours Temperature Violation Count"
+      ]
+    },
+    {
+      "dashboard_title": "Arbitrage & Rerouting Hub",
+      "slug": "arbitrage-rerouting-hub",
+      "slices": [
+        "Port Spot Price Differential",
+        "Net Rerouting Margin Gain",
+        "Top Diversion Recommendations"
+      ]
+    },
+    {
+      "dashboard_title": "Commodity Financial Analytics",
+      "slug": "commodity-financial-analytics",
+      "slices": [
+        "Cargo Valuation at Risk",
+        "Carbon Footprint Tax Liability",
+        "Price Variance per Metric Ton"
+      ]
+    }
+  ]
+}

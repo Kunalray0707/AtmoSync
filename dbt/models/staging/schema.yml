@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: raw
+    database: ATMOSYNC_DB
+    schema: RAW
+    tables:
+      - name: RAW_CONTAINER_TELEMETRY
+        description: "Raw landing JSON stream from Kafka container telemetry"
+
+models:
+  - name: stg_container_telemetry
+    description: "Flattened and sanitized micro-climate container telemetry stream"
+    columns:
+      - name: container_id
+        description: "Primary container unit identifier"
+        tests:
+          - not_null
+      - name: temperature
+        description: "Recorded container micro-climate temperature in Celsius"
+        tests:
+          - not_null
+      - name: commodity
+        description: "Agricultural perishable commodity type"
+        tests:
+          - not_null

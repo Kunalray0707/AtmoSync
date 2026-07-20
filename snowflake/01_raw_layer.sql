@@ -1,0 +1,40 @@
+-- ============================================================================
+-- AtmoSync Snowflake Architecture: 01 - RAW Layer (Ingestion & Staging)
+-- ============================================================================
+
+CREATE DATABASE IF NOT EXISTS ATMOSYNC_DB;
+USE DATABASE ATMOSYNC_DB;
+
+-- Create Architecture Schemas
+CREATE SCHEMA IF NOT EXISTS RAW_SCHEMA;
+CREATE SCHEMA IF NOT EXISTS STAGING_SCHEMA;
+CREATE SCHEMA IF NOT EXISTS ANALYTICS_SCHEMA;
+
+USE SCHEMA RAW_SCHEMA;
+
+-- File Format for Ingesting Streaming Telemetry JSON
+CREATE OR REPLACE FILE FORMAT JSON_FILE_FORMAT
+    TYPE = 'JSON'
+    STRIP_OUTER_ARRAY = TRUE
+    ENABLE_OCTAL = FALSE
+    IGNORE_UTF8_ERRORS = FALSE
+    ALLOW_DUPLICATE = FALSE;
+
+-- Internal Stage for Kafka / IoT Telemetry Dump
+CREATE OR REPLACE STAGE TELEMETRY_STAGE
+    FILE_FORMAT = JSON_FILE_FORMAT;
+
+-- RAW Telemetry Landing Table storing semi-structured VARIANT payloads
+CREATE OR REPLACE TABLE RAW_TELEMETRY (
+    INGESTION_ID VARCHAR(64) DEFAULT UUID_STRING(),
+    INGESTION_TIMESTAMP TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP(),
+    SOURCE_TOPIC VARCHAR(100) DEFAULT 'atmosync.telemetry.raw',
+    FILE_NAME VARCHAR(255),
+    PAYLOAD VARIANT
+)
+CLUSTER BY (INGESTION_TIMESTAMP::DATE);
+
+-- Copy command template for loading from Stage
+-- COPY INTO RAW_TELEMETRY (FILE_NAME, PAYLOAD)
+-- FROM @TELEMETRY_STAGE
+-- FILE_FORMAT = (FORMAT_NAME = 'JSON_FILE_FORMAT');
