@@ -1,3 +1,2 @@
-"""
-AtmoSync FastAPI Backend Package
-"""
+# AtmoSync Backend
+
