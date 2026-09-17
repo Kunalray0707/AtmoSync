@@ -37,6 +37,10 @@ class ApiClient:
                     detail = str(exc.response.json().get("detail", detail))
                 except ValueError:
                     pass
+            elif isinstance(exc, httpx.ConnectError):
+                detail = f"Backend unavailable at {BACKEND_URL}. Start FastAPI on 127.0.0.1:8000."
+            elif isinstance(exc, httpx.TimeoutException):
+                detail = f"Backend request timed out after {REQUEST_TIMEOUT:g}s at {BACKEND_URL}."
             raise ApiError(detail) from exc
 
     def get(self, path: str, **params: Any) -> Any:
