@@ -46,7 +46,9 @@ AtmoSync/
 ├── tests/                # Pytest suite
 ├── docs/                 # API and project documentation
 ├── docker/               # Docker-related files
-├── requirements.txt
+├── requirements.txt      # Streamlit Cloud/dashboard dependencies
+├── requirements-backend.txt
+├── runtime.txt           # Streamlit Cloud Python runtime
 ├── .env.example
 ├── .gitignore
 └── README.md
@@ -125,8 +127,13 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+python -m pip install -r requirements-backend.txt
 npm install
 ```
+
+`requirements.txt` is intentionally the lean Streamlit Cloud dependency set. `requirements-backend.txt` contains the separate FastAPI, SQLAlchemy, Alembic, and `asyncpg` backend environment.
+
+The project pins Streamlit Cloud to Python 3.11 through `runtime.txt`. This avoids the current Python 3.14.7 deployment issue with older pinned packages.
 
 ## Environment configuration
 
@@ -163,6 +170,8 @@ Backend URL: http://127.0.0.1:8000
 API prefix: http://127.0.0.1:8000/api
 OpenAPI documentation: http://127.0.0.1:8000/docs
 
+The backend uses SQLAlchemy's async PostgreSQL URL (`postgresql+asyncpg://...`) and therefore requires `asyncpg` from `requirements-backend.txt`. `psycopg2-binary` is not used by the source code and is intentionally not installed.
+
 ## Running Streamlit
 
 ```powershell
@@ -173,6 +182,8 @@ cd D:\Atmosync
 Dashboard URL: http://localhost:8502
 
 The app automatically discovers local datasets from `D:\Atmosync\data`. If no supported file exists, it displays an onboarding message rather than fake metrics.
+
+Streamlit Cloud installs only `requirements.txt`. The dataset-driven pages work from the repository's committed `data/` files; the optional Live Operations page requires an externally reachable FastAPI backend configured with `ATMOSYNC_BACKEND_URL`.
 
 ## Running the frontend
 
@@ -199,6 +210,12 @@ The latest verified result is:
 - 28 passed
 - 0 failed
 - 2 warnings
+
+For dependency resolution checks:
+
+```powershell
+.\venv\Scripts\python.exe -m pip install --dry-run -r requirements.txt
+```
 
 Compilation check:
 
