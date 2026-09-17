@@ -104,6 +104,22 @@ def evaluate_arbitrage_opportunity(telemetry: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def evaluate_arbitrage_opportunities(records: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Backward-compatible wrapper for legacy API callers."""
+    opportunities = []
+    total_gain = 0.0
+    for record in records:
+        result = evaluate_arbitrage_opportunity(record)
+        if result["recommendation"] == "REROUTE_RECOMMENDED":
+            opportunities.append(result)
+            total_gain += float(result.get("max_net_profit_delta_usd", 0.0))
+    return {
+        "opportunities_count": len(opportunities),
+        "total_potential_arbitrage_gain_usd": round(total_gain, 2),
+        "opportunities": opportunities,
+    }
+
+
 if __name__ == "__main__":
     test_event = {
         "container_id": "CONT-1002",

@@ -70,6 +70,11 @@ def calculate_container_health(telemetry: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def evaluate_sensor_health(telemetry: Dict[str, Any]) -> Dict[str, Any]:
+    """Legacy compatibility wrapper for the old API contract."""
+    return calculate_container_health(telemetry)
+
+
 if __name__ == "__main__":
     t = {"container_id": "CONT-1004", "battery": 12.0, "door_open": True, "sensor_health": "DEGRADED", "temperature": 8.0, "ambient_temperature": 38.0}
     print("Health Engine Test Result:", calculate_container_health(t))

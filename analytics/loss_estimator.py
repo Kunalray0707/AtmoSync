@@ -60,6 +60,14 @@ def calculate_financial_and_carbon_loss(telemetry: Dict[str, Any]) -> Dict[str, 
     }
 
 
+def estimate_cargo_loss(telemetry: Dict[str, Any], spoilage_score: float | None = None) -> Dict[str, Any]:
+    """Backward-compatible wrapper expected by the legacy API surface."""
+    result = calculate_financial_and_carbon_loss(telemetry)
+    if spoilage_score is not None:
+        result["spoilage_risk_score_pct"] = float(spoilage_score)
+    return result
+
+
 if __name__ == "__main__":
     event = {"container_id": "CONT-1003", "commodity": "Blueberries", "temperature": 8.0, "humidity": 70.0}
     loss_res = calculate_financial_and_carbon_loss(event)

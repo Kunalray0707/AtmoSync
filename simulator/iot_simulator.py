@@ -172,6 +172,13 @@ class IoTTelemetryFleet:
             time.sleep(interval)
 
 
+class IoTSimulator(IoTTelemetryFleet):
+    """Backward-compatible alias used by the legacy FastAPI application."""
+
+    def __init__(self, num_containers: int = 20):
+        super().__init__(fleet_size=num_containers)
+
+
 # Standalone runner for testing simulator
 if __name__ == "__main__":
     fleet = IoTTelemetryFleet(fleet_size=5)
